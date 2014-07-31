@@ -25,28 +25,32 @@ module.exports = function (grunt) {
         clean: {
             tests: ['tmp'],
         },
-
-        appcache: {
-            options: {
-                basePath: 'test'
-            },
-            test: {
-                dest: 'tmp/appcache.manifest',
-                cache: 'test/**/*'
-            }
-        },
-
         nodeunit: {
             tests: ['test/*_test.js'],
+        },
+
+
+        appcache: {
+            options: {                
+                version: 'v1.0'
+            },
+            test: {             
+                dest: 'tmp/appcache.manifest',
+                cache: {
+                    patterns: [ 'test/expected/read/revision.json',
+                                'test/fixtures/read/revision.manifest']                    
+                  }
+            }
         },
     });
 
     grunt.loadTasks('tasks');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-nodeunit');
+    grunt.loadNpmTasks('grunt-contrib-nodeunit');    
 
     grunt.registerTask('test', ['clean', 'appcache', 'nodeunit']);
     grunt.registerTask('default', ['jshint', 'test']);
+    grunt.registerTask('app', ['appcache']);
 
 };
